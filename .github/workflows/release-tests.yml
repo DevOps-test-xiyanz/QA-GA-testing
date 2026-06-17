@@ -13,17 +13,31 @@ permissions:
 jobs:
   # Add any job before (e.g. build, deploy) ...
 
-  test:
+  api-test:
+    name: API Release Tests
     runs-on: ubuntu-latest
     steps:
-
-      - name: Trigger Release Tests
+      - name: Trigger API Release Tests
         uses: aws-actions/devops-agent-qa@v1
         with:
           webhook-url: ${{ secrets.DEVOPS_AGENT_WEBHOOK_URL }}
           webhook-secret: ${{ secrets.DEVOPS_AGENT_WEBHOOK_SECRET }}
           test-profile-id: ki-05684e5b-4c19-4c81-a157-a504cbba569f
           test-requirement: "verify one api is correct"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+  ui-test:
+    name: UI Release Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger UI Release Tests
+        uses: aws-actions/devops-agent-qa@v1
+        with:
+          webhook-url: ${{ secrets.DEVOPS_AGENT_WEBHOOK_URL }}
+          webhook-secret: ${{ secrets.DEVOPS_AGENT_WEBHOOK_SECRET }}
+          test-profile-id: ki-28fb94c7-4105-475e-a36a-9ed353e0d2cb
+          test-requirement: "verify main page loads"
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
