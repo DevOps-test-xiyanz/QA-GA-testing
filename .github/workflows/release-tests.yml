@@ -1,0 +1,31 @@
+name: Release Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  checks: write
+  contents: read
+  pull-requests: read
+
+jobs:
+  # Add any job before (e.g. build, deploy) ...
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Trigger Release Tests
+        uses: aws-actions/devops-agent-qa@v1
+        with:
+          webhook-url: ${{ secrets.DEVOPS_AGENT_WEBHOOK_URL }}
+          webhook-secret: ${{ secrets.DEVOPS_AGENT_WEBHOOK_SECRET }}
+          test-profile-id: ki-28fb94c7-4105-475e-a36a-9ed353e0d2cb
+          test-requirement: "verify the home page loads"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+  # ... or any job after
